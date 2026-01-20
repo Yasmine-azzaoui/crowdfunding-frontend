@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, shrink-to-fit=no"
+        />
+        <title>Todo List</title>
+        <link rel="stylesheet" href="style.css" />
+    </head>
+
+    <body>
+        <h1>My Todo List</h1>
+        <ul id="todo-list"></ul>
+        <!-- unordered list = ul, ordered list ol -->
+        <div id="new-task-input">
+            <!-- you can hide label with hidden. less ugly -->
+            <label hidden for="new-task-text">Add a todo</label>.  
+            <input id="new-task-text" type="text" placeholder="Todo task" />
+            <input
+                id="new-task-button"
+                type="button"
+                value="Submit"
+                onclick="addTask()"
+            />
+        </div>
+        <script src="script.js"></script>
+    </body>
+</html>
