@@ -11,10 +11,10 @@ async function getFundraisers() {
     if (!response.ok) {
         const fallbackError = "Error fetching fundraisers";
     // Here we use the `await` keyword to signal to Javascript that it shouldn't run this code until `resonse` gets turned into JSON
-    const data = await response.json().catch(() => {
+        const data = await response.json().catch(() => {
     // If the response is not JSON then we will throw a generic error. 'catch will trigger if we try to tunr `response` into JSON and fail
-        throw new Error(fallbackError);    
-    });
+            throw new Error(fallbackError);
+        });
     // If the error response *is* JSON, then we will include the info from that JSON in the error we throw. 
     // Usually, the server will send the error message in the `detail` property.
     // You may have not configured the back end to use the `detail` property. If that is the case then you can change the code below to use a different property, e.g.: `message`

@@ -9,6 +9,14 @@ export default function useFundraisers() {
     const [error, setError] = useState();
 
     useEffect(() => {
+        // try {
+        //     const allFundraisers = getFundraisers()
+        //     setFundraisers(allFundraisers)
+        // } catch {
+
+        // } finally {
+
+        // }
         getFundraisers().then((fundraisers) => {
             setFundraisers(fundraisers);
             setIsLoading(false);
