@@ -6,6 +6,10 @@ import HomePage from "./Pages/HomePage.jsx";
 import FundraisersPage from "./Pages/FundraisersPage.jsx";
 import FundraiserPage from "./Pages/FundraiserPage.jsx";
 import LoginPage from "./Pages/LoginPage.jsx";
+import AccountPage from "./Pages/AccountPage.jsx";
+import CreateFundraiser from "./Pages/CreateFundraiser.jsx";
+import "./modern.css";
+import "./index.css";
 
 const myRouter = createBrowserRouter([
   {
@@ -14,8 +18,10 @@ const myRouter = createBrowserRouter([
     children: [
       { path: "/", element: <HomePage /> },
       { path: "/login", element: <LoginPage /> },
+      { path: "/account", element: <AccountPage /> },
+      { path: "/create-fundraiser", element: <CreateFundraiser /> },
       { path: "/fundraiser/:id", element: <FundraiserPage /> },
-      { path: "/fundraisers/:id", element: <FundraisersPage /> },
+      { path: "/fundraisers", element: <FundraisersPage /> },
     ],
   },
 ]);

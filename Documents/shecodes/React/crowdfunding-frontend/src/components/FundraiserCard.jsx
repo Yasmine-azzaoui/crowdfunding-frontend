@@ -2,16 +2,24 @@ import { Link } from "react-router-dom";
 
 function FundraiserCard(props) {
   const { fundraiserData } = props;
-  // Use an absolute path so the Link always resolves to /fundraiser/:id
   const fundraiserLink = `/fundraiser/${fundraiserData.id}`;
-  //  const test = undefined;
+
   return (
-    <div>
-      <Link to={fundraiserLink}>
-        <img src={fundraiserData.image} />
-        <h3>{fundraiserData.title}</h3>
+    <article
+      className="fundraiser-card"
+      aria-labelledby={`fund-${fundraiserData.id}-title`}
+    >
+      <Link to={fundraiserLink} className="fundraiser-link">
+        {fundraiserData.image && (
+          <img
+            src={fundraiserData.image}
+            alt={`${fundraiserData.title} cover`}
+          />
+        )}
+        <h3 id={`fund-${fundraiserData.id}-title`}>{fundraiserData.title}</h3>
+        <p className="fundraiser-summary">{fundraiserData.summary ?? ""}</p>
       </Link>
-    </div>
+    </article>
   );
 }
 

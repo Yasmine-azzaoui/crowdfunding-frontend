@@ -11,9 +11,11 @@
   will-change: filter;
   transition: filter 300ms;
 }
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
+
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
@@ -22,6 +24,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -39,4 +42,224 @@
 
 .read-the-docs {
   color: #888;
+}
+
+:root {
+  --brand: #353148;
+  --action: #B98E68;
+  --white: #F1EEE6;
+  --base-light: #D2CFC4;
+  --base-dark: #493A35;
+  --black: #111111;
+  --primary: #6366f1;
+  --primary-dark: #4f46e5;
+  --secondary: #ec4899;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --bg-light: #f9fafb;
+  --text-dark: #1f2937;
+  --text-light: #6b7280;
+  --border-color: #e5e7eb;
+}
+
+/* Header / Nav */
+.site-header {
+  background: linear-gradient(90deg, var(--white), #fff);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.nav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.brand {
+  color: var(--brand);
+  text-decoration: none;
+  font-size: 1.1rem
+}
+
+.primary-nav ul {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.primary-nav a {
+  text-decoration: none;
+  color: var(--black);
+  padding: 8px 10px;
+  border-radius: 6px
+}
+
+.primary-nav a:focus,
+.primary-nav a:hover {
+  background: var(--base-light);
+  outline: none
+}
+
+.mobile-toggle {
+  background: transparent;
+  border: 0;
+  padding: 8px
+}
+
+.hamburger {
+  display: inline-block;
+  width: 28px;
+  height: 2px;
+  background: var(--black);
+  position: relative
+}
+
+.hamburger:before,
+.hamburger:after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--black)
+}
+
+.hamburger:before {
+  top: -8px
+}
+
+.hamburger:after {
+  top: 8px
+}
+
+/* mobile first hide desktop nav */
+.primary-nav {
+  display: none
+}
+
+.primary-nav.open {
+  display: block;
+}
+
+@media(min-width:768px) {
+  .mobile-toggle {
+    display: none
+  }
+
+  .primary-nav {
+    display: block
+  }
+}
+
+/* Fundraiser card styles to mimic CV article cards */
+.fundraiser-card {
+  background: var(--base-light);
+  border-radius: 10px;
+  padding: 1rem;
+  margin: 1rem;
+  transition: transform .25s ease, filter .25s ease, box-shadow .25s ease;
+}
+
+.fundraiser-card:hover {
+  transform: translateY(-6px);
+  filter: contrast(120%);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.fundraiser-link {
+  text-decoration: none;
+  color: inherit;
+  display: block
+}
+
+.fundraiser-link img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  display: block
+}
+
+.fundraiser-summary {
+  color: var(--brand);
+  font-size: 0.95rem
+}
+
+/* Child card */
+.children-list {
+  display: grid;
+  gap: 1rem
+}
+
+.child-card {
+  background: var(--white);
+  border-radius: 8px;
+  padding: 0.75rem;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  transition: background .2s ease, transform .2s ease;
+}
+
+.child-card:hover {
+  background: linear-gradient(90deg, var(--action), #fff);
+  color: var(--white);
+  transform: translateY(-4px)
+}
+
+.child-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center
+}
+
+.child-card-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .25s ease, padding .2s ease
+}
+
+.child-card.expanded .child-card-body {
+  max-height: 400px;
+  padding-top: 0.5rem
+}
+
+.child-toggle {
+  background: transparent;
+  border: 1px solid var(--brand);
+  border-radius: 6px;
+  padding: 6px 8px
+}
+
+/* Bluecard placeholder */
+.bluecard-cta,
+.bluecard-cta-create {
+  padding: 1rem;
+  background: var(--base-light);
+  border-radius: 8px
+}
+
+.bluecard-mock {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin-top: 0.5rem
+}
+
+.bluecard-sample {
+  background: linear-gradient(180deg, #d9edf8, #bfe9ff);
+  padding: 1rem 1.5rem;
+  border-radius: 6px;
+  color: #06384a;
+  font-weight: 700
+}
+
+/* Focus outlines for accessibility */
+a:focus,
+button:focus,
+input:focus,
+textarea:focus {
+  outline: 3px solid rgba(99, 102, 241, 0.18);
+  outline-offset: 2px
 }
