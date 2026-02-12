@@ -588,25 +588,150 @@ main {
 
 /* Fundraisers Section */
 .fundraisers-section {
-    margin-top: 2rem;
+    margin-top: 3rem;
+    padding: 2rem;
+    background: var(--bg-light);
+    border-radius: 12px;
+    border-left: 4px solid var(--primary);
 }
 
 .fundraisers-section h2 {
     color: var(--text-dark);
     font-size: 1.5rem;
+    margin-top: 0;
     margin-bottom: 1.5rem;
 }
 
 .empty-state {
+    color: var(--text-light);
+    font-size: 1rem;
     text-align: center;
     padding: 2rem;
-    background: var(--bg-light);
+    background: white;
     border-radius: 8px;
-    color: var(--text-light);
 }
 
 .empty-state p {
     margin: 0 0 1rem 0;
+}
+
+/* Simple Fundraiser List for Account Page */
+.fundraisers-list-simple {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.fundraiser-card-simple {
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.fundraiser-card-simple:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-color: var(--primary);
+}
+
+.card-header-simple {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    gap: 1rem;
+}
+
+.card-header-simple h3 {
+    color: var(--text-dark);
+    font-size: 1.2rem;
+    margin: 0;
+    flex: 1;
+}
+
+.badge {
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.badge.open {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.badge.closed {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.card-summary {
+    color: var(--text-dark);
+    font-size: 1rem;
+    margin: 0 0 1rem 0;
+    line-height: 1.5;
+}
+
+.card-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.detail-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.detail-row .label {
+    color: var(--text-light);
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.detail-row .value {
+    color: var(--text-dark);
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+/* Status Buttons */
+.btn-status {
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-open {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.btn-open:hover {
+    background: #bbf7d0;
+}
+
+.btn-close {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.btn-close:hover {
+    background: #fecaca;
 }
 
 .fundraisers-simple {
@@ -967,4 +1092,266 @@ main {
     .form-actions .btn {
         width: 100%;
     }
+}
+
+/* Fundraiser Detail Page */
+.fundraiser-detail-page {
+    background: var(--bg-light);
+    padding: 2rem 1rem;
+}
+
+.fundraiser-container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.fundraiser-header {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
+    padding: 2.5rem 2rem;
+    border-bottom: 4px solid var(--primary-dark);
+}
+
+.fundraiser-header h1 {
+    font-size: 2.2rem;
+    margin: 0 0 1rem 0;
+    color: white;
+}
+
+.fundraiser-meta {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.status-badge {
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.status-badge.open {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.status-badge.closed {
+    background: rgba(239, 68, 68, 0.2);
+    color: #fecaca;
+}
+
+.fundraiser-meta .date {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.95rem;
+}
+
+.fundraiser-description,
+.children-section,
+.pledges-section,
+.recent-pledges {
+    padding: 2rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.fundraiser-description:last-child,
+.children-section:last-child,
+.pledges-section:last-child,
+.recent-pledges:last-child {
+    border-bottom: none;
+}
+
+.fundraiser-description h2,
+.children-section h2,
+.pledges-section h2,
+.recent-pledges h2 {
+    color: var(--text-dark);
+    font-size: 1.5rem;
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+
+.fundraiser-description p {
+    color: var(--text-dark);
+    font-size: 1.05rem;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.children-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.no-children {
+    color: var(--text-light);
+    text-align: center;
+    padding: 2rem;
+    background: var(--bg-light);
+    border-radius: 8px;
+}
+
+.bluecard-cta {
+    background: #f0f9ff;
+    border: 2px solid #e0f2fe;
+    border-radius: 8px;
+    padding: 1.5rem;
+    color: var(--text-dark);
+    text-align: center;
+}
+
+.bluecard-cta p {
+    margin: 0.5rem 0;
+    color: var(--text-dark);
+}
+
+.pledge-section {
+    background: var(--bg-light);
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+}
+
+.pledge-section h3 {
+    color: var(--text-dark);
+    font-size: 1.2rem;
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+
+.preset-amounts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.preset-btn {
+    padding: 0.75rem 1rem;
+    border: 2px solid var(--primary);
+    background: white;
+    color: var(--primary);
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.preset-btn:hover {
+    background: var(--primary);
+    color: white;
+}
+
+.custom-amount {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.custom-amount label {
+    display: block;
+    color: var(--text-dark);
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.currency-symbol {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-right: 0.5rem;
+}
+
+.input-group input,
+.form-input {
+    flex: 1;
+    padding: 0.75rem;
+    border: 2px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 1rem;
+    color: var(--text-dark);
+}
+
+.input-group input:focus,
+.form-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.pledge-btn {
+    width: 100%;
+    padding: 0.85rem;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+}
+
+.pledge-btn:hover:not(:disabled) {
+    background: var(--primary-dark);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.pledge-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.pledge-btn.time-btn {
+    background: var(--secondary);
+}
+
+.pledge-btn.time-btn:hover:not(:disabled) {
+    background: #d946ef;
+}
+
+.note {
+    color: var(--text-light);
+    font-size: 0.9rem;
+    margin-top: 0.75rem;
+    padding: 0.75rem;
+    background: rgba(240, 245, 250, 0.8);
+    border-radius: 4px;
+}
+
+.pledges-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.pledge-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+}
+
+.pledge-type {
+    font-weight: 700;
+    color: var(--text-dark);
+    font-size: 1.05rem;
+}
+
+.pledge-supporter {
+    color: var(--text-light);
+    font-size: 0.95rem;
 }

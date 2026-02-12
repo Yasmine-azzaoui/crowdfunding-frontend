@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Navigate } from "react-router-dom";
 import getFundraisers from "../api/get-fundraisers";
+import getPledges from "../api/get-pledges";
 import patchFundraiser from "../api/patch-fundraiser";
 
 function AccountPage() {
@@ -9,10 +10,12 @@ function AccountPage() {
   const token = window.localStorage.getItem("token");
   const userJson = window.localStorage.getItem("user");
   const user = userJson ? JSON.parse(userJson) : null;
-  const [userFundraisers, setUserFundraisers] = useState([]);
+  const [userCreatedFundraisers, setUserCreatedFundraisers] = useState([]);
+  const [userSupportedFundraisers, setUserSupportedFundraisers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
+
   if (!token || !user) {
     return <Navigate to="/login" replace />;
   }
@@ -21,28 +24,50 @@ function AccountPage() {
     const fetchAccountData = async () => {
       try {
         setIsLoading(true);
+
+        // Get all fundraisers
         const allFundraisers = await getFundraisers();
         console.log("All fundraisers from API:", allFundraisers);
-        console.log("Current user object:", user);
         console.log("Current user ID:", user.id);
 
-        // Try different possible owner field names
-        const userCreatedFundraisers = allFundraisers.filter((f) => {
-          console.log(
-            `Fundraiser ${f.id} owner:`,
-            f.owner,
-            "Type:",
-            typeof f.owner,
-            "User ID:",
-            user.id,
-            "Type:",
-            typeof user.id,
-          );
-          return f.owner === user.id || f.owner == user.id; // Check both === and ==
-        });
+        // Filter fundraisers created by this user
+        const createdFundraisers = allFundraisers.filter(
+          (f) => f.owner === user.id || f.owner == user.id,
+        );
+        console.log("Fundraisers created by user:", createdFundraisers);
+        setUserCreatedFundraisers(createdFundraisers);
 
-        console.log("Filtered user fundraisers:", userCreatedFundraisers);
-        setUserFundraisers(userCreatedFundraisers);
+        // Get pledges to find supported fundraisers
+        try {
+          const allPledges = await getPledges(token);
+          console.log("All pledges:", allPledges);
+
+          // Filter pledges by current user and get unique fundraiser IDs
+          const userPledges = Array.isArray(allPledges)
+            ? allPledges.filter(
+                (p) => p.supporter === user.id || p.supporter == user.id,
+              )
+            : [];
+
+          console.log("User's pledges:", userPledges);
+
+          // Get unique fundraiser IDs from pledges
+          const supportedFundraiserIds = [
+            ...new Set(userPledges.map((p) => p.fundraiser)),
+          ];
+          console.log("Supported fundraiser IDs:", supportedFundraiserIds);
+
+          // Get fundraiser details for supported fundraisers
+          const supportedFundraisers = allFundraisers.filter((f) =>
+            supportedFundraiserIds.includes(f.id),
+          );
+
+          console.log("Supported fundraisers details:", supportedFundraisers);
+          setUserSupportedFundraisers(supportedFundraisers);
+        } catch (pledgeErr) {
+          console.warn("Could not fetch pledges:", pledgeErr);
+          setUserSupportedFundraisers([]);
+        }
       } catch (err) {
         setError(err.message);
       } finally {
@@ -51,7 +76,7 @@ function AccountPage() {
     };
 
     fetchAccountData();
-  }, [user.id]);
+  }, [user.id, token]);
 
   // const fetchAccountData = async () => {
   //   try {
@@ -73,18 +98,24 @@ function AccountPage() {
 
   const handleStatusToggle = async (fundraiserId, currentStatus) => {
     try {
+      console.log(`Toggling fundraiser ${fundraiserId} status from ${currentStatus} to ${!currentStatus}`);
       const newStatus = !currentStatus;
+      console.log("Calling patchFundraiser with:", { fundraiserId, is_open: newStatus, token: token ? "✓" : "✗" });
+      
       await patchFundraiser(fundraiserId, { is_open: newStatus }, token);
-      setUserFundraisers((prev) =>
+      
+      console.log("Patch successful, updating local state");
+      setUserCreatedFundraisers((prev) =>
         prev.map((f) =>
           f.id === fundraiserId ? { ...f, is_open: newStatus } : f,
         ),
       );
       setMessage(`Fundraiser ${newStatus ? "opened" : "closed"}!`);
-      setTimeout(() => setMessage(""), 2000);
+      setTimeout(() => setMessage(""), 3000);
     } catch (err) {
+      console.error("Error toggling status:", err);
       setMessage(`Error: ${err.message}`);
-      setTimeout(() => setMessage(""), 2000);
+      setTimeout(() => setMessage(""), 3000);
     }
   };
 
@@ -115,15 +146,19 @@ function AccountPage() {
       {/* Message */}
       {message && <div className="message success">{message}</div>}
 
-      {/* My Fundraisers */}
+      {/* My Created Fundraisers */}
       <section className="fundraisers-section">
-        <h2>My Fundraiser{userFundraisers.length !== 1 ? "s" : ""}</h2>
+        <h2>
+          Fundraiser{userCreatedFundraisers.length !== 1 ? "s" : ""} I Created
+        </h2>
 
-        {userFundraisers.length === 0 ? (
-          <p className="empty-state">You've got no fundraisers yet.</p>
+        {userCreatedFundraisers.length === 0 ? (
+          <p className="empty-state">
+            You haven't created any fundraisers yet.
+          </p>
         ) : (
           <div className="fundraisers-list-simple">
-            {userFundraisers.map((fundraiser) => (
+            {userCreatedFundraisers.map((fundraiser) => (
               <div key={fundraiser.id} className="fundraiser-card-simple">
                 <div className="card-header-simple">
                   <h3>{fundraiser.title}</h3>
@@ -134,12 +169,14 @@ function AccountPage() {
                   </span>
                 </div>
 
-                <p className="card-summary">{fundraiser.summary}</p>
+                <p className="card-summary">
+                  {fundraiser.summary || "No summary"}
+                </p>
 
                 <div className="card-details">
                   <div className="detail-row">
                     <span className="label">Goal:</span>
-                    <span className="value">${fundraiser.goal}</span>
+                    <span className="value">${fundraiser.goal || "N/A"}</span>
                   </div>
                   <div className="detail-row">
                     <span className="label">Created:</span>
@@ -160,9 +197,61 @@ function AccountPage() {
                   onClick={() =>
                     handleStatusToggle(fundraiser.id, fundraiser.is_open)
                   }
+                  title={fundraiser.is_open ? "Close this fundraiser to stop receiving pledges" : "Open this fundraiser to accept pledges"}
                 >
-                  {fundraiser.is_open ? "Close" : "Open"}
+                  {fundraiser.is_open ? "Close Fundraiser" : "Reopen Fundraiser"}
                 </button>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
+
+      {/* Fundraisers I Support */}
+      <section className="fundraisers-section">
+        <h2>
+          Fundraiser{userSupportedFundraisers.length !== 1 ? "s" : ""} I Support
+        </h2>
+
+        {userSupportedFundraisers.length === 0 ? (
+          <p className="empty-state">
+            You haven't supported any fundraisers yet.
+          </p>
+        ) : (
+          <div className="fundraisers-list-simple">
+            {userSupportedFundraisers.map((fundraiser) => (
+              <div key={fundraiser.id} className="fundraiser-card-simple">
+                <div className="card-header-simple">
+                  <h3>{fundraiser.title}</h3>
+                  <span
+                    className={`badge ${fundraiser.is_open ? "open" : "closed"}`}
+                  >
+                    {fundraiser.is_open ? "Open" : "Closed"}
+                  </span>
+                </div>
+
+                <p className="card-summary">
+                  {fundraiser.summary || "No summary"}
+                </p>
+
+                <div className="card-details">
+                  <div className="detail-row">
+                    <span className="label">Goal:</span>
+                    <span className="value">${fundraiser.goal || "N/A"}</span>
+                  </div>
+                  <div className="detail-row">
+                    <span className="label">Created:</span>
+                    <span className="value">
+                      {new Date(fundraiser.date_created).toLocaleDateString()}
+                    </span>
+                  </div>
+                  {fundraiser.pledges && fundraiser.pledges.length > 0 && (
+                    <div className="detail-row">
+                      <span className="label">Total Pledges:</span>
+                      <span className="value">{fundraiser.pledges.length}</span>
+                    </div>
+                  )}
+                </div>
               </div>
             ))}
           </div>
