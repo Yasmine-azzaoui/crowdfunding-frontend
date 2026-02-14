@@ -98,12 +98,18 @@ function AccountPage() {
 
   const handleStatusToggle = async (fundraiserId, currentStatus) => {
     try {
-      console.log(`Toggling fundraiser ${fundraiserId} status from ${currentStatus} to ${!currentStatus}`);
+      console.log(
+        `Toggling fundraiser ${fundraiserId} status from ${currentStatus} to ${!currentStatus}`,
+      );
       const newStatus = !currentStatus;
-      console.log("Calling patchFundraiser with:", { fundraiserId, is_open: newStatus, token: token ? "✓" : "✗" });
-      
+      console.log("Calling patchFundraiser with:", {
+        fundraiserId,
+        is_open: newStatus,
+        token: token ? "✓" : "✗",
+      });
+
       await patchFundraiser(fundraiserId, { is_open: newStatus }, token);
-      
+
       console.log("Patch successful, updating local state");
       setUserCreatedFundraisers((prev) =>
         prev.map((f) =>
@@ -197,9 +203,15 @@ function AccountPage() {
                   onClick={() =>
                     handleStatusToggle(fundraiser.id, fundraiser.is_open)
                   }
-                  title={fundraiser.is_open ? "Close this fundraiser to stop receiving pledges" : "Open this fundraiser to accept pledges"}
+                  title={
+                    fundraiser.is_open
+                      ? "Close this fundraiser to stop receiving pledges"
+                      : "Open this fundraiser to accept pledges"
+                  }
                 >
-                  {fundraiser.is_open ? "Close Fundraiser" : "Reopen Fundraiser"}
+                  {fundraiser.is_open
+                    ? "Close Fundraiser"
+                    : "Reopen Fundraiser"}
                 </button>
               </div>
             ))}

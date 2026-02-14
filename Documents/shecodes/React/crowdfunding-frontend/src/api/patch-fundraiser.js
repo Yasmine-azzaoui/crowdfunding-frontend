@@ -1,14 +1,14 @@
 // Patch a fundraiser. data should be a partial object with fields to update.
 async function patchFundraiser(fundraiserId, data, token) {
   const url = `${import.meta.env.VITE_API_URL}/fundraisers/${fundraiserId}/`;
-  
+
   console.log("PATCH fundraiser:", {
     url,
     fundraiserId,
     data,
-    token: token ? "✓ Present" : "✗ Missing"
+    token: token ? "✓ Present" : "✗ Missing",
   });
-  
+
   const response = await fetch(url, {
     method: "PATCH",
     headers: {
@@ -25,7 +25,11 @@ async function patchFundraiser(fundraiserId, data, token) {
     try {
       const dataErr = await response.json();
       console.log("PATCH error response:", dataErr);
-      const errorMessage = dataErr?.detail || dataErr?.error || JSON.stringify(dataErr) || fallbackError;
+      const errorMessage =
+        dataErr?.detail ||
+        dataErr?.error ||
+        JSON.stringify(dataErr) ||
+        fallbackError;
       throw new Error(errorMessage);
     } catch (parseErr) {
       console.log("Could not parse PATCH error:", parseErr);
@@ -39,4 +43,3 @@ async function patchFundraiser(fundraiserId, data, token) {
 }
 
 export default patchFundraiser;
-
