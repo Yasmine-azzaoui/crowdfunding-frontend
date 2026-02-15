@@ -193,6 +193,29 @@ function FundraiserPage() {
             </span>
           </div>
         </div>
+        {fundraiser.image && (
+          <div className="fundraiser-image-wrapper">
+            <img
+              src={fundraiser.image}
+              alt={fundraiser.title}
+              className={`fundraiser-hero-image ${
+                token && user?.bluecard ? "" : "blurred"
+              }`}
+              loading="lazy"
+            />
+
+            {!(token && user?.bluecard) && (
+              <div className="image-lock-overlay">
+                🔒 Bluecard Required to View Image
+              </div>
+            )}
+          </div>
+        )}
+
+        <div className="fundraiser-description">
+          <h2>About this fundraiser</h2>
+          <p>{fundraiser.description || "No description provided."}</p>
+        </div>
 
         <div className="fundraiser-description">
           <h2>About this fundraiser</h2>

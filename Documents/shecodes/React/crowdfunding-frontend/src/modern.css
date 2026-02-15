@@ -8,7 +8,7 @@
     --base-light: #e8e4df;
     --base-dark: #3d352f;
     --black: #1a1512;
-    --primary: #6b8e23;
+    --primary: #a3ca56;
     --primary-dark: #3d5a1a;
     --secondary: #c67c4e;
     --success: #5d9e5f;
@@ -1592,4 +1592,42 @@ main {
         flex: 1;
         min-width: 100px;
     }
+}
+
+.fundraiser-image-wrapper {
+    position: relative;
+    width: 100%;
+    max-height: 420px;
+    overflow: hidden;
+    border-radius: 16px;
+    margin-bottom: 24px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+
+}
+
+.fundraiser-hero-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+
+}
+
+.blurred {
+    filter: blur(20px);
+    transform: scale(1.05);
+
+}
+
+.image-lock-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: white;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(2px);
 }
