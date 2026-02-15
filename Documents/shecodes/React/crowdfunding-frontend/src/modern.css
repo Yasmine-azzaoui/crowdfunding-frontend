@@ -1,22 +1,23 @@
 /* Dorfkind Modern Styling */
 
 :root {
-    --brand: #353148;
-    --action: #B98E68;
-    --white: #F1EEE6;
-    --base-light: #D2CFC4;
-    --base-dark: #493A35;
-    --black: #111111;
-    --primary: #6366f1;
-    --primary-dark: #4f46e5;
-    --secondary: #ec4899;
-    --success: #10b981;
-    --warning: #f59e0b;
-    --danger: #ef4444;
-    --bg-light: #f9fafb;
-    --text-dark: #1f2937;
-    --text-light: #6b7280;
-    --border-color: #e5e7eb;
+    /* Earthy & Organic Color Palette with High Contrast */
+    --brand: #5d7b4f;
+    --action: #8b6f47;
+    --white: #f5f3f0;
+    --base-light: #e8e4df;
+    --base-dark: #3d352f;
+    --black: #1a1512;
+    --primary: #6b8e23;
+    --primary-dark: #3d5a1a;
+    --secondary: #c67c4e;
+    --success: #5d9e5f;
+    --warning: #d4a574;
+    --danger: #b85c42;
+    --bg-light: #faf8f5;
+    --text-dark: #2b2419;
+    --text-light: #6b5d52;
+    --border-color: #d9d2ca;
 }
 
 * {
@@ -327,8 +328,8 @@ main {
 }
 
 .fundraisers-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    display: flex;
+    flex-direction: column;
     gap: 2rem;
 }
 
@@ -378,7 +379,7 @@ main {
 .create-fundraiser-page,
 .home-page {
     padding: 0;
-    display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: flex-start;
     min-height: 100vh;
@@ -1396,4 +1397,199 @@ main {
 .pledge-supporter {
     color: var(--text-light);
     font-size: 0.95rem;
+}
+
+.hero-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+}
+
+.hero-text {
+    flex: 1;
+}
+
+.hero-image {
+    width: 400px;
+    max-width: 45%;
+    height: auto;
+}
+
+@media (max-width: 768px) {
+    .hero-content {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .hero-image {
+        max-width: 80%;
+    }
+}
+
+/* 404 Not Found Page */
+.not-found-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--bg-light) 0%, #f0ebe5 100%);
+    padding: 2rem;
+}
+
+.not-found-container {
+    width: 100%;
+    max-width: 600px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(91, 124, 79, 0.15);
+    padding: 4rem 2rem;
+    text-align: center;
+}
+
+.not-found-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center;
+}
+
+.not-found-title {
+    font-size: 6rem;
+    font-weight: 900;
+    margin: 0;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--brand) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.not-found-subtitle {
+    font-size: 2rem;
+    color: var(--text-dark);
+    margin: 0;
+    font-weight: 700;
+}
+
+.not-found-message {
+    font-size: 1.1rem;
+    color: var(--text-light);
+    line-height: 1.6;
+    margin: 0;
+    max-width: 400px;
+}
+
+.not-found-illustration {
+    display: flex;
+    justify-content: center;
+    font-size: 5rem;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+.illustration-emoji {
+    display: inline-block;
+    animation: inherit;
+}
+
+.not-found-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    margin: 1rem 0;
+}
+
+.not-found-actions .btn {
+    width: 100%;
+}
+
+.not-found-suggestions {
+    width: 100%;
+    border-top: 2px solid var(--border-color);
+    padding-top: 2rem;
+}
+
+.not-found-suggestions h3 {
+    color: var(--text-dark);
+    margin: 0 0 1rem 0;
+    font-size: 1.2rem;
+}
+
+.not-found-suggestions ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.not-found-suggestions li {
+    margin: 0;
+}
+
+.not-found-suggestions a {
+    display: inline-block;
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+}
+
+.not-found-suggestions a:hover {
+    background: var(--bg-light);
+    color: var(--primary-dark);
+    transform: translateX(5px);
+}
+
+/* Responsive 404 Page */
+@media (max-width: 600px) {
+    .not-found-container {
+        padding: 2rem 1.5rem;
+    }
+
+    .not-found-title {
+        font-size: 4rem;
+    }
+
+    .not-found-subtitle {
+        font-size: 1.5rem;
+    }
+
+    .not-found-message {
+        font-size: 1rem;
+    }
+
+    .not-found-illustration {
+        font-size: 3.5rem;
+    }
+
+    .not-found-actions {
+        flex-direction: column;
+    }
+
+    .not-found-suggestions ul {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .not-found-suggestions li {
+        flex: 1;
+        min-width: 100px;
+    }
 }

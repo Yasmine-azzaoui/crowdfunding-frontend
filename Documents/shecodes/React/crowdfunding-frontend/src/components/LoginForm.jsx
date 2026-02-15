@@ -91,7 +91,7 @@ function LoginForm() {
           disabled={isLoading}
         />
       </div>
-      <button type="submit" disabled={isLoading}>
+      <button className="btn-login" type="submit" disabled={isLoading}>
         {isLoading ? "Logging in..." : "Login"}
       </button>
     </form>

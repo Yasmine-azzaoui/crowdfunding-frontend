@@ -13,6 +13,25 @@ async function postFundraiser(fundraiserData, token) {
     headers["Content-Type"] = "application/json";
   }
 
+  console.log("🔵 POST Fundraiser Debug Info:");
+  console.log("  URL:", url);
+  console.log("  Token Present:", !!token);
+  console.log("  Is FormData:", fundraiserData instanceof FormData);
+
+  // Log FormData contents if applicable
+  if (fundraiserData instanceof FormData) {
+    console.log("  FormData entries:");
+    for (let [key, value] of fundraiserData.entries()) {
+      if (value instanceof File) {
+        console.log(
+          `    ${key}: File(${value.name}, ${value.size} bytes, ${value.type})`,
+        );
+      } else {
+        console.log(`    ${key}: ${value}`);
+      }
+    }
+  }
+
   const response = await fetch(url, {
     method: "POST",
     headers: headers,
@@ -22,21 +41,25 @@ async function postFundraiser(fundraiserData, token) {
         : JSON.stringify(fundraiserData),
   });
 
+  console.log("  Response Status:", response.status, response.statusText);
+
   if (!response.ok) {
     const fallbackError = "Error creating fundraiser";
     try {
       const data = await response.json();
-      console.log("Backend error response:", data);
+      console.error("❌ Backend error response:", data);
       const errorMessage =
         data?.detail || data?.error || JSON.stringify(data) || fallbackError;
       throw new Error(errorMessage);
     } catch (parseErr) {
-      console.log("Could not parse error response:", parseErr);
+      console.error("❌ Could not parse error response:", parseErr);
       throw new Error(fallbackError);
     }
   }
 
-  return await response.json();
+  const responseData = await response.json();
+  console.log("✅ Fundraiser created successfully:", responseData);
+  return responseData;
 }
 
 export default postFundraiser;

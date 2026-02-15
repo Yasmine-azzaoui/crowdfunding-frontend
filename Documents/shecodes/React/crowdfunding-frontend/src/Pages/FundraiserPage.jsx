@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import getFundraiser from "../api/get-fundraiser";
 import getChildrenByFundraiser from "../api/get-children-by-fundraiser";
+import getUsers from "../api/get-users";
 import postPledge from "../api/post-pledge";
 import patchFundraiser from "../api/patch-fundraiser";
 import ChildCard from "../components/ChildCard.jsx";
@@ -13,6 +14,7 @@ function FundraiserPage() {
   // Local UI state for fundraiser, children and loading/errors
   const [fundraiser, setFundraiser] = useState(null);
   const [children, setChildren] = useState([]);
+  const [users, setUsers] = useState([]); // Store all users for mapping supporter IDs to names
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState();
   const [message, setMessage] = useState("");
@@ -26,7 +28,7 @@ function FundraiserPage() {
   const user = userJson ? JSON.parse(userJson) : null;
 
   useEffect(() => {
-    // Fetch fundraiser details and children using async logic.
+    // Fetch fundraiser details, children, and users using async logic.
     setIsLoading(true);
 
     Promise.all([
@@ -35,13 +37,19 @@ function FundraiserPage() {
         console.error("Error fetching children:", err);
         return []; // Return empty array if children fetch fails
       }),
+      getUsers(token).catch((err) => {
+        console.error("Error fetching users:", err);
+        return []; // Return empty array if users fetch fails
+      }),
     ])
-      .then(([fundraiserData, childrenData]) => {
+      .then(([fundraiserData, childrenData, usersData]) => {
         console.log("Fundraiser data:", fundraiserData);
         console.log("Children data:", childrenData);
+        console.log("Users data:", usersData);
 
         setFundraiser(fundraiserData);
         setChildren(childrenData || []);
+        setUsers(usersData || []);
         setIsLoading(false);
       })
       .catch((err) => {
@@ -143,9 +151,17 @@ function FundraiserPage() {
   };
 
   const calculateTimePledges = () => {
-    return (fundraiser?.pledges || []).filter(
-      (p) => p.pledge_type === "time"
-    ).length;
+    return (fundraiser?.pledges || []).filter((p) => p.pledge_type === "time")
+      .length;
+  };
+
+  // Helper function to get supporter name from supporter ID
+  const getSupporterName = (supporterId) => {
+    const supporter = users.find((u) => u.id === supporterId);
+    if (supporter) {
+      return supporter.first_name || supporter.username || "Anonymous";
+    }
+    return "Anonymous";
   };
 
   return (
@@ -197,19 +213,20 @@ function FundraiserPage() {
                     style={{
                       width: `${Math.min(
                         (calculateTotalMoney() / fundraiser.goal) * 100,
-                        100
+                        100,
                       )}%`,
                     }}
                   ></div>
                 </div>
                 <div className="progress-text">
-                  <span className="raised">${calculateTotalMoney().toFixed(2)}</span>
+                  <span className="raised">
+                    ${calculateTotalMoney().toFixed(2)}
+                  </span>
                   <span className="goal">of ${fundraiser.goal}</span>
                 </div>
                 <p className="progress-percent">
-                  {Math.round(
-                    (calculateTotalMoney() / fundraiser.goal) * 100
-                  )}% funded
+                  {Math.round((calculateTotalMoney() / fundraiser.goal) * 100)}%
+                  funded
                 </p>
               </div>
             )}
@@ -405,7 +422,8 @@ function FundraiserPage() {
                       : `⏱️ ${pledgeData.hours} hours`}
                   </div>
                   <div className="pledge-supporter">
-                    from <strong>{pledgeData.supporter}</strong>
+                    from{" "}
+                    <strong>{getSupporterName(pledgeData.supporter)}</strong>
                   </div>
                 </div>
               ))}

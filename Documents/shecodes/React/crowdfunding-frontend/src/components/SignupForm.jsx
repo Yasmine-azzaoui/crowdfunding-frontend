@@ -86,7 +86,9 @@ function SignupForm() {
           onChange={handleChange}
         />
       </div>
-      <button type="submit">Create account</button>
+      <button className="btn-login" type="submit">
+        Create account
+      </button>
       <div>{message}</div>
     </form>
   );

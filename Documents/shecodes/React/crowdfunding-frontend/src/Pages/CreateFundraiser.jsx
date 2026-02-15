@@ -15,7 +15,7 @@ function CreateFundraiser() {
     summary: "",
     description: "",
     goal: "",
-    image: null,
+    imageUrl: "", // Changed from 'image' to 'imageUrl' (string, not file)
     pledgeType: "both", // "money", "time", or "both"
   });
 
@@ -27,7 +27,7 @@ function CreateFundraiser() {
     description: "",
     SpecialHelp: false,
     Specify: "",
-    image: null,
+    imageUrl: "", // Changed from 'image' to 'imageUrl' (string, not file)
   });
 
   // UI state
@@ -55,20 +55,19 @@ function CreateFundraiser() {
     }));
   };
 
-  // Handle fundraiser image upload
+  // Handle fundraiser image URL change
   const handleFundraiserImageChange = (e) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setFundraiserForm((prev) => ({
-        ...prev,
-        image: file,
-      }));
-      // Show preview
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setFundraiserImagePreview(reader.result);
-      };
-      reader.readAsDataURL(file);
+    const url = e.target.value;
+    setFundraiserForm((prev) => ({
+      ...prev,
+      imageUrl: url,
+    }));
+    // Show preview
+    if (url) {
+      setFundraiserImagePreview(url);
+      console.log("🖼️ Fundraiser image URL updated:", url);
+    } else {
+      setFundraiserImagePreview(null);
     }
   };
 
@@ -81,20 +80,19 @@ function CreateFundraiser() {
     }));
   };
 
-  // Handle child image upload
+  // Handle child image URL change
   const handleChildImageChange = (e) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setChildForm((prev) => ({
-        ...prev,
-        image: file,
-      }));
-      // Show preview
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setChildImagePreview(reader.result);
-      };
-      reader.readAsDataURL(file);
+    const url = e.target.value;
+    setChildForm((prev) => ({
+      ...prev,
+      imageUrl: url,
+    }));
+    // Show preview
+    if (url) {
+      setChildImagePreview(url);
+      console.log("🖼️ Child image URL updated:", url);
+    } else {
+      setChildImagePreview(null);
     }
   };
 
@@ -152,29 +150,32 @@ function CreateFundraiser() {
       setIsSubmitting(true);
 
       // Step 1: Create fundraiser FIRST (because child needs fundraiser_id)
-      const fundraiserData = new FormData();
-      fundraiserData.append("title", fundraiserForm.title);
-      fundraiserData.append("summary", fundraiserForm.summary);
-      fundraiserData.append("description", fundraiserForm.description || ""); // Ensure description is sent
-      fundraiserData.append("pledge_type", fundraiserForm.pledgeType);
+      // Note: Backend expects URLField for image, so send as JSON, not FormData
+      const fundraiserData = {
+        title: fundraiserForm.title,
+        summary: fundraiserForm.summary,
+        description: fundraiserForm.description || "",
+        pledge_type: fundraiserForm.pledgeType,
+        is_open: true,
+      };
 
-      // Only append goal if it's a money or both pledge, convert to integer
+      // Backend ALWAYS requires goal field
       if (
         fundraiserForm.pledgeType === "money" ||
         fundraiserForm.pledgeType === "both"
       ) {
-        fundraiserData.append("goal", parseInt(fundraiserForm.goal, 10));
+        fundraiserData.goal = parseInt(fundraiserForm.goal, 10);
+      } else {
+        fundraiserData.goal = 0;
       }
 
-      if (fundraiserForm.image) {
-        fundraiserData.append("image", fundraiserForm.image);
+      // Add image URL if provided
+      if (fundraiserForm.imageUrl) {
+        fundraiserData.image = fundraiserForm.imageUrl;
       }
 
       console.log("Creating fundraiser...");
-      console.log("Fundraiser data being sent:");
-      for (let [key, value] of fundraiserData.entries()) {
-        console.log(`  ${key}: ${value}`);
-      }
+      console.log("Fundraiser data being sent:", fundraiserData);
       const newFundraiser = await postFundraiser(fundraiserData, token);
       console.log("Fundraiser created:", newFundraiser);
       setMessage("Fundraiser created! Adding child...");
@@ -267,36 +268,33 @@ function CreateFundraiser() {
             </div>
 
             <div className="form-row">
-              <div className="form-group">
-                <label htmlFor="goal">
-                  Goal Amount ($){" "}
-                  {(fundraiserForm.pledgeType === "money" ||
-                    fundraiserForm.pledgeType === "both") &&
-                    "*"}
-                </label>
-                <input
-                  id="goal"
-                  name="goal"
-                  type="number"
-                  placeholder="1000"
-                  value={fundraiserForm.goal}
-                  onChange={handleFundraiserChange}
-                  min="1"
-                  step="0.01"
-                  required={
-                    fundraiserForm.pledgeType === "money" ||
-                    fundraiserForm.pledgeType === "both"
-                  }
-                />
-              </div>
+              {/* Goal field only shows for money or both pledges */}
+              {(fundraiserForm.pledgeType === "money" ||
+                fundraiserForm.pledgeType === "both") && (
+                <div className="form-group">
+                  <label htmlFor="goal">Goal Amount ($) *</label>
+                  <input
+                    id="goal"
+                    name="goal"
+                    type="number"
+                    placeholder="1000"
+                    value={fundraiserForm.goal}
+                    onChange={handleFundraiserChange}
+                    min="1"
+                    step="0.01"
+                    required
+                  />
+                </div>
+              )}
 
               <div className="form-group">
-                <label htmlFor="image">Fundraiser Image</label>
+                <label htmlFor="imageUrl">Fundraiser Image URL</label>
                 <input
-                  id="image"
-                  name="image"
-                  type="file"
-                  accept="image/*"
+                  id="imageUrl"
+                  name="imageUrl"
+                  type="url"
+                  placeholder="https://example.com/image.jpg"
+                  value={fundraiserForm.imageUrl}
                   onChange={handleFundraiserImageChange}
                 />
                 {fundraiserImagePreview && (
@@ -434,12 +432,13 @@ function CreateFundraiser() {
             )}
 
             <div className="form-group">
-              <label htmlFor="childImage">Child's Photo</label>
+              <label htmlFor="childImageUrl">Child's Photo URL</label>
               <input
-                id="childImage"
-                name="childImage"
-                type="file"
-                accept="image/*"
+                id="childImageUrl"
+                name="childImageUrl"
+                type="url"
+                placeholder="https://example.com/photo.jpg"
+                value={childForm.imageUrl}
                 onChange={handleChildImageChange}
               />
               {childImagePreview && (

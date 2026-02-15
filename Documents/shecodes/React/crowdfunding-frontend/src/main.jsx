@@ -8,6 +8,7 @@ import FundraiserPage from "./Pages/FundraiserPage.jsx";
 import LoginPage from "./Pages/LoginPage.jsx";
 import AccountPage from "./Pages/AccountPage.jsx";
 import CreateFundraiser from "./Pages/CreateFundraiser.jsx";
+import NotFoundPage from "./Pages/NotFoundPage.jsx";
 import "./modern.css";
 import "./index.css";
 
@@ -22,6 +23,7 @@ const myRouter = createBrowserRouter([
       { path: "/create-fundraiser", element: <CreateFundraiser /> },
       { path: "/fundraiser/:id", element: <FundraiserPage /> },
       { path: "/fundraisers", element: <FundraisersPage /> },
+      { path: "*", element: <NotFoundPage /> },
     ],
   },
 ]);
