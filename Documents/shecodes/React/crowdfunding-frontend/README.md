@@ -30,7 +30,7 @@ Here's a reminder of the required features. Your crowdfunding project must:
 - [x] Implement suitable update/delete functionality, e.g. should a fundraiser owner be allowed to update its description?
 - [x] Implement suitable permissions, e.g. who is allowed to delete a pledge?
 - [x] Return the relevant status codes for both successful and unsuccessful requests to the API.
-- [ ] Handle failed requests gracefully (e.g. you should have a custom 404 page rather than the default error page).
+- [x] Handle failed requests gracefully (e.g. you should have a custom 404 page rather than the default error page).
 - [x] Use Token Authentication, including an endpoint to obtain a token along with the current user's details.
 - [x] Implement responsive design.
 
@@ -46,9 +46,15 @@ To submit, fill out [this Google form](https://forms.gle/34ymxgPhdT8YXDgF6), inc
 
 Please include the following in your readme doc:
 
-- [ ] A link to the deployed project.
-- [ ] A screenshot of the homepage
-- [ ] A screenshot of the fundraiser creation page
-- [ ] A screenshot of the fundraiser creation form
-- [ ] A screenshot of a fundraiser with pledges
-- [ ] A screenshot of the resulting page when an unauthorized user attempts to edit a fundraiser (optional, depending on whether or not this functionality makes sense in your app!)
+- [x] A link to the deployed project.
+      https://lively-nasturtium-d3c5e8.netlify.app/
+- [x] A screenshot of the homepage
+      ![alt text](login_home.png)
+      ![alt text](loggedout_home.png)
+- [x] A screenshot of the fundraiser creation page
+      ![alt text](Fundraiser_page_and_form.png)
+- [x] A screenshot of the fundraiser creation form
+      ![alt text](Fundraiser_page_and_form.png)
+- [x] A screenshot of a fundraiser with pledges
+      ![alt text](fundraiser_view_for_card.png)
+      ![alt text](fundraiser_view_for_nocard.png)
